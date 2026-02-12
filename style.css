@@ -1,0 +1,121 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #2b0000;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
+  height: 100vh;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper {
+  text-align: center;
+}
+
+.title-box h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 3rem;
+  color: #ff5c8d;
+}
+
+.title-box p {
+  margin-top: 10px;
+  color: #ffc0cb;
+}
+
+.btn-group {
+  margin-top: 30px;
+}
+
+button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: 0.3s;
+}
+
+.btn-yes {
+  background: #ff4d6d;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-yes.attractive {
+  animation: pulse 0.8s infinite alternate;
+  box-shadow:
+    0 0 15px #ff4d6d,
+    0 0 30px #ff4d6d,
+    0 0 60px #ff1e56;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+.btn-no {
+  background: #444;
+  color: white;
+  position: relative;
+}
+
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  background: transparent; /* remove black */
+  z-index: 3;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s ease;
+}
+
+.success-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.success-overlay h2 {
+  font-family: "Dancing Script", cursive;
+  font-size: 3rem;
+  color: #ff5c8d;
+}
+
+.success-overlay p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ffc0cb;
+  font-family: Arial, sans-serif;
+}
