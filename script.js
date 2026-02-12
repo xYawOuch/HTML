@@ -5,6 +5,9 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
+let showFlower = false;
+
+let flowers = [];
 
 class Particle {
   constructor(x, y) {
@@ -26,6 +29,66 @@ class Particle {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
+  }
+}
+
+class Flower {
+  constructor(x, maxStemHeight, petalColor) {
+    this.x = x;
+    this.baseY = canvas.height / 2 + 200;
+
+    this.stemHeight = 0;
+    this.maxStemHeight = maxStemHeight;
+
+    this.bloomScale = 0;
+    this.petalColor = petalColor;
+  }
+
+  update() {
+    if (this.stemHeight < this.maxStemHeight) {
+      this.stemHeight += 3; // faster grow
+    } else if (this.bloomScale < 1) {
+      this.bloomScale += 0.03;
+    }
+  }
+
+  draw() {
+    const centerX = this.x;
+    const bottomY = this.baseY;
+
+    // 🌱 Stem
+    ctx.strokeStyle = "#00ff99";
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(centerX, bottomY);
+    ctx.lineTo(centerX, bottomY - this.stemHeight);
+    ctx.stroke();
+
+    // 🌸 Flower
+    if (this.stemHeight >= this.maxStemHeight) {
+      const flowerY = bottomY - this.stemHeight;
+
+      ctx.save();
+      ctx.translate(centerX, flowerY);
+      ctx.scale(this.bloomScale, this.bloomScale);
+
+      // Bigger petals
+      for (let i = 0; i < 8; i++) {
+        ctx.rotate(Math.PI / 4);
+        ctx.beginPath();
+        ctx.fillStyle = this.petalColor;
+        ctx.ellipse(0, -50, 30, 70, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Center glow
+      ctx.beginPath();
+      ctx.fillStyle = "#ff1744";
+      ctx.arc(0, 0, 25, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
   }
 }
 
@@ -61,7 +124,61 @@ function animate() {
     p.draw();
   });
 
+  if (showFlower) {
+    flowers.forEach((flower) => {
+      flower.update();
+      flower.draw();
+    });
+  }
+
   requestAnimationFrame(animate);
+}
+
+function drawFlower() {
+  const centerX = canvas.width / 2;
+  const bottomY = canvas.height / 2 + 150;
+
+  // 🌱 Grow stem
+  if (stemHeight < maxStemHeight) {
+    stemHeight += 2;
+  }
+
+  ctx.strokeStyle = "#00ff99";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(centerX, bottomY);
+  ctx.lineTo(centerX, bottomY - stemHeight);
+  ctx.stroke();
+
+  // 🌸 Bloom after stem finishes
+  if (stemHeight >= maxStemHeight) {
+    if (bloomScale < 1) {
+      bloomScale += 0.02;
+    }
+
+    const flowerY = bottomY - stemHeight;
+
+    ctx.save();
+    ctx.translate(centerX, flowerY);
+    ctx.scale(bloomScale, bloomScale);
+
+    // Draw petals
+    for (let i = 0; i < 6; i++) {
+      ctx.rotate(Math.PI / 3);
+      ctx.beginPath();
+      ctx.fillStyle = "#ffffff";
+      ctx.ellipse(0, -30, 20, 40, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Center
+    ctx.beginPath();
+    ctx.fillStyle = "#ff4d6d";
+    ctx.arc(0, 0, 15, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
 }
 
 createHeart();
@@ -75,6 +192,14 @@ const mainUI = document.getElementById("mainUI");
 yesBtn.addEventListener("click", () => {
   mainUI.style.display = "none"; // hide main content
   successScreen.classList.add("active");
+
+  showFlower = true;
+
+  flowers = [
+    new Flower(canvas.width / 2 - 120, 350, "#ffb3c6"),
+    new Flower(canvas.width / 2, 380, "#ffffff"), // center biggest
+    new Flower(canvas.width / 2 + 120, 350, "#ffb3c6"),
+  ];
 });
 
 // NO button runs away
