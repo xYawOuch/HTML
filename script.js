@@ -196,9 +196,11 @@ yesBtn.addEventListener("click", () => {
   showFlower = true;
 
   flowers = [
+    new Flower(canvas.width / 2 - 250, 300, "#ffffff"),
     new Flower(canvas.width / 2 - 120, 350, "#ffb3c6"),
     new Flower(canvas.width / 2, 380, "#ffffff"), // center biggest
     new Flower(canvas.width / 2 + 120, 350, "#ffb3c6"),
+    new Flower(canvas.width / 2 + 250, 300, "#ffffff"),
   ];
 });
 
